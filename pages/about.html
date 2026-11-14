@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Tim Pengembang - Peta Risiko ISPA</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <!-- Bootstrap Icons untuk Sosmed -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="about.css">
+</head>
+<body>
+
+    <!-- Navbar Standar Navigasi Antarhalaman -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="index.html">🦠 ISPA Risk Map</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="generator.html">Peta Risiko & Simulasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="about.html">Tentang Kami</a>
+                    </li>
+                    <!-- Dropdown Vertical Menu Tambahan -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Menu Lainnya
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="generator.html#export">Ekspor Dataset CSV</a></li>
+                            <li><a class="dropdown-item" href="index.html#documentation">Dokumentasi Sistem</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="about.html">Bantuan & Kontak</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Kontainer Utama Halaman About (Murni Tim Pengembang) -->
+    <div class="container my-5">
+        
+        <!-- Bagian: Profil Tim Pengembang -->
+        <section class="mb-5" id="support">
+            <div class="text-center mb-5">
+                <span class="badge bg-success mb-2 px-3 py-2 rounded-pill">Tim Pengembang</span>
+                <h1 class="fw-bold">Kenali Tim Di Balik Layar</h1>
+                <p class="text-muted">Tiga kolaborator berdedikasi dalam perancangan arsitektur dan antarmuka sistem.</p>
+                
+                <!-- Kontrol Pengatur Bingkai Wajah (Frame Customizer) -->
+                <div class="mt-4 d-inline-flex align-items-center gap-2 bg-light p-2 rounded-3 border shadow-sm">
+                    <label for="frame-shape-select" class="form-label small fw-bold mb-0 text-secondary">Ubah Bingkai Wajah:</label>
+                    <select id="frame-shape-select" class="form-select form-select-sm w-auto">
+                        <option value="circle">Lingkaran Sempurna (Circle)</option>
+                        <option value="rounded">Sudut Melengkung (Rounded Square)</option>
+                        <option value="octagon">Segi Delapan (Octagon)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid Anggota Tim (3 Orang) -->
+            <div class="row g-4 justify-content-center">
+                
+                <!-- Anggota 1 -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 text-center p-4 team-card">
+                        <div class="avatar-container mx-auto mb-3">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Ahmad Fahrur Rosi" class="team-avatar circle">
+                        </div>
+                        <h4 class="fw-bold mb-1">Ahmad Fahrur Rosi</h4>
+                        <span class="badge bg-primary-subtle text-primary mb-3 mx-auto">Lead Fullstack Developer</span>
+                        <p class="text-muted small mb-4">Bertanggung jawab atas logika pemodelan spasial, integrasi peta Leaflet, dan arsitektur sistem.</p>
+                        <div class="d-flex justify-content-center gap-2 mt-auto">
+                            <a href="https://github.com" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                <i class="bi bi-github"></i> GitHub
+                            </a>
+                            <a href="https://instagram.com" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                <i class="bi bi-instagram"></i> Instagram
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anggota 2 -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 text-center p-4 team-card">
+                        <div class="avatar-container mx-auto mb-3">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80" alt="Bayu Laksana al-Hasani" class="team-avatar circle">
+                        </div>
+                        <h4 class="fw-bold mb-1">Bayu Laksana al-Hasani</h4>
+                        <span class="badge bg-success-subtle text-success mb-3 mx-auto">GIS & Data Analyst</span>
+                        <p class="text-muted small mb-4">Mengelola pengumpulan dataset wilayah, simulasi indeks AQI, dan analisis faktor risiko kesehatan.</p>
+                        <div class="d-flex justify-content-center gap-2 mt-auto">
+                            <a href="https://github.com" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                <i class="bi bi-github"></i> GitHub
+                            </a>
+                            <a href="https://instagram.com" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                <i class="bi bi-instagram"></i> Instagram
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anggota 3: Denis Muhammad Widarianto -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 text-center p-4 team-card">
+                        <div class="avatar-container mx-auto mb-3">
+                            <img src="..\assets\images\Denis Muhammad Widarianto.jpg" alt="Denis Muhammad Widarianto" class="team-avatar circle">
+                        </div>
+                        <h4 class="fw-bold mb-1">Denis Muhammad Widarianto</h4>
+                        <span class="badge bg-warning-subtle text-warning-emphasis mb-3 mx-auto">UI/UX & Frontend Engineer</span>
+                        <p class="text-muted small mb-4">Merancang antarmuka responsif menggunakan Bootstrap dan memastikan kenyamanan pengalaman pengguna.</p>
+                        <div class="d-flex justify-content-center gap-2 mt-auto">
+                            <a href="https://github.com/DenzfiilsGo" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                <i class="bi bi-github"></i> GitHub
+                            </a>
+                            <a href="https://www.instagram.com/denzfiilsgo/" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                <i class="bi bi-instagram"></i> Instagram
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="about.js"></script>
+</body>
+</html>

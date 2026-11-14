@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Risiko & Generator Model ISPA</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <!-- Leaflet CSS untuk Peta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="generator.css">
+</head>
+<body>
+
+    <!-- Navbar Standar Navigasi Antarhalaman -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="index.html">🦠 ISPA Risk Map</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="generator.html">Peta Risiko & Simulasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">Tentang Kami</a>
+                    </li>
+                    <!-- Dropdown Vertical Menu Standar -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Menu Lainnya
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="generator.html#export">Ekspor Dataset CSV</a></li>
+                            <li><a class="dropdown-item" href="about.html#documentation">Dokumentasi API</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="about.html#support">Bantuan & Kontak</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Kontainer Utama Peta & Generator -->
+    <div class="app-container">
+        <!-- Sidebar Kontrol, Statistik, & Form Generator -->
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <h1>Peta Risiko & Simulasi</h1>
+                <p>Model Prediksi Spasial & Kalkulator Wilayah</p>
+            </header>
+
+            <!-- Pencarian & Filter Peta -->
+            <div class="control-group">
+                <label for="search-input">Cari Kecamatan / Wilayah</label>
+                <input type="text" id="search-input" class="form-control" placeholder="Ketik nama wilayah...">
+            </div>
+
+            <div class="control-group">
+                <label for="risk-filter">Filter Tingkat Risiko</label>
+                <select id="risk-filter" class="form-select">
+                    <option value="all">Semua Tingkat Risiko</option>
+                    <option value="high">Risiko Tinggi</option>
+                    <option value="medium">Risiko Sedang</option>
+                    <option value="low">Risiko Rendah</option>
+                </select>
+            </div>
+
+            <!-- Ringkasan Data Peta -->
+            <div class="stats-panel">
+                <h3>Ringkasan Wilayah Terpantau</h3>
+                <div class="stat-cards">
+                    <div class="stat-card high">
+                        <span class="stat-value" id="count-high">0</span>
+                        <span class="stat-label">Tinggi</span>
+                    </div>
+                    <div class="stat-card medium">
+                        <span class="stat-value" id="count-medium">0</span>
+                        <span class="stat-label">Sedang</span>
+                    </div>
+                    <div class="stat-card low">
+                        <span class="stat-value" id="count-low">0</span>
+                        <span class="stat-label">Rendah</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Generator & Simulasi Parameter Baru -->
+            <div class="generator-box p-3 bg-light rounded-3 border">
+                <h3 class="h6 fw-bold mb-2">⚙️ Tambah Simulasi Wilayah</h3>
+                <form id="risk-generator-form" class="d-flex flex-column gap-2">
+                    <input type="text" class="form-control form-control-sm" id="region-name" placeholder="Nama Wilayah baru" required>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-small text-muted" style="font-size: 0.75rem;">AQI (<span id="val-aqi">120</span>)</label>
+                            <input type="range" class="form-range" id="input-aqi" min="20" max="300" value="120">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-small text-muted" style="font-size: 0.75rem;">Kasus Aktif</label>
+                            <input type="number" class="form-control form-control-sm" id="input-cases" min="0" max="1000" value="150" required>
+                        </div>
+                    </div>
+                    <input type="number" class="form-control form-control-sm" id="input-density" placeholder="Kepadatan (Jiwa/km²)" value="8500" required>
+                    <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">Simulasikan & Tambah ke Peta</button>
+                </form>
+            </div>
+
+            <!-- Detail Wilayah Terpilih -->
+            <div class="info-box" id="region-detail">
+                <h3>Detail Wilayah</h3>
+                <p class="placeholder-text">Klik titik pada peta untuk melihat detail kasus, kepadatan penduduk, dan kualitas udara.</p>
+            </div>
+
+            <!-- Bagian Ekspor CSV -->
+            <div id="export-section" class="mt-2">
+                <button id="btn-export" class="btn btn-outline-success btn-sm w-100 fw-semibold">📥 Ekspor Dataset ke CSV</button>
+            </div>
+        </aside>
+
+        <!-- Area Utama Peta Spasial -->
+        <main class="map-wrapper">
+            <div id="map"></div>
+            
+            <!-- Legenda Peta -->
+            <div class="map-legend">
+                <h4>Indeks Risiko ISPA</h4>
+                <div class="legend-item"><span class="dot high"></span> Tinggi (Skor &gt; 70)</div>
+                <div class="legend-item"><span class="dot medium"></span> Sedang (Skor 40 - 70)</div>
+                <div class="legend-item"><span class="dot low"></span> Rendah (Skor &lt; 40)</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Custom JS -->
+    <script src="generator.js"></script>
+</body>
+</html>
