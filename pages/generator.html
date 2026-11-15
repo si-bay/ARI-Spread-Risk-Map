@@ -6,10 +6,10 @@
     <title>Peta Risiko & Generator Model ISPA</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <!-- Leaflet CSS untuk Peta -->
+    <!-- Leaflet CSS untuk Peta (Tanpa API Key / Gratis) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="generator.css">
+    <link rel="stylesheet" href="../css/generator.css">
 </head>
 <body>
 
@@ -31,14 +31,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">Tentang Kami</a>
                     </li>
-                    <!-- Dropdown Vertical Menu Standar -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Menu Lainnya
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="generator.html#export">Ekspor Dataset CSV</a></li>
-                            <li><a class="dropdown-item" href="about.html#documentation">Dokumentasi API</a></li>
+                            <li><a class="dropdown-item" href="about.html#documentation">Dokumentasi Sistem</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="about.html#support">Bantuan & Kontak</a></li>
                         </ul>
@@ -54,7 +53,7 @@
         <aside class="sidebar">
             <header class="sidebar-header">
                 <h1>Peta Risiko & Simulasi</h1>
-                <p>Model Prediksi Spasial & Kalkulator Wilayah</p>
+                <p>Model Tabular Spasial & Kalkulator Wilayah</p>
             </header>
 
             <!-- Pencarian & Filter Peta -->
@@ -92,9 +91,9 @@
                 </div>
             </div>
 
-            <!-- Form Generator & Simulasi Parameter Baru -->
+            <!-- Form Generator & Simulasi Parameter Model Tabular -->
             <div class="generator-box p-3 bg-light rounded-3 border">
-                <h3 class="h6 fw-bold mb-2">⚙️ Tambah Simulasi Wilayah</h3>
+                <h3 class="h6 fw-bold mb-2">⚙️ Simulasi Model Tabular</h3>
                 <form id="risk-generator-form" class="d-flex flex-column gap-2">
                     <input type="text" class="form-control form-control-sm" id="region-name" placeholder="Nama Wilayah baru" required>
                     <div class="row g-2">
@@ -108,7 +107,7 @@
                         </div>
                     </div>
                     <input type="number" class="form-control form-control-sm" id="input-density" placeholder="Kepadatan (Jiwa/km²)" value="8500" required>
-                    <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">Simulasikan & Tambah ke Peta</button>
+                    <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">Jalankan Prediksi & Tambah ke Peta</button>
                 </form>
             </div>
 
@@ -124,7 +123,7 @@
             </div>
         </aside>
 
-        <!-- Area Utama Peta Spasial -->
+        <!-- Area Utama Peta Spasial (Bebas API Key) -->
         <main class="map-wrapper">
             <div id="map"></div>
             
@@ -140,9 +139,9 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Leaflet JS -->
+    <!-- Leaflet JS (Tanpa API Key) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Custom JS -->
-    <script src="generator.js"></script>
+    <script src="../js/generator.js"></script>
 </body>
 </html>

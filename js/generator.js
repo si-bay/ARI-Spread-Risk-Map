@@ -1,13 +1,15 @@
-// Inisialisasi Peta (Default berpusat di Surabaya / Jawa Timur)
+// --- GENERATOR.JS : PETA SPASIAL & LOGIKA MODEL TABULAR ---
+
+// 1. Inisialisasi Peta (Default berpusat di Surabaya / Wilayah Pantauan - Tanpa API Key)
 const map = L.map('map').setView([-7.2575, 112.7521], 12);
 
-// Tambahkan Layer Peta Dasar (CartoDB Positron)
+// Tambahkan Layer Peta Dasar Gratis (CartoDB Positron - Tidak Butuh Token/API Key)
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     maxZoom: 18
 }).addTo(map);
 
-// Dataset Awal Wilayah
+// 2. Dataset Awal Wilayah (Simulasi Data Tabular)
 let ispaData = [
     { id: 1, name: "Kec. Gubeng", lat: -7.2756, lng: 112.7508, riskScore: 84, level: "high", cases: 342, aqi: 158, density: "14.200/km²" },
     { id: 2, name: "Kec. Wonokromo", lat: -7.2981, lng: 112.7366, riskScore: 78, level: "high", cases: 295, aqi: 149, density: "16.500/km²" },
@@ -50,7 +52,7 @@ function showRegionDetail(item) {
         <h3>Detail: ${item.name}</h3>
         <ul class="detail-list">
             <li>
-                <span>Status Risiko</span>
+                <span>Status Risiko (Model Tabular)</span>
                 <strong style="color: ${badgeColor}">${getRiskLabel(item.level)} (${item.riskScore}/100)</strong>
             </li>
             <li>
@@ -58,7 +60,7 @@ function showRegionDetail(item) {
                 <strong>${item.cases} Kasus</strong>
             </li>
             <li>
-                <span>Indeks Polusi (AQI)</span>
+                <span>Indeks Polusi (AQI / Karhutla)</span>
                 <strong>${item.aqi}</strong>
             </li>
             <li>
@@ -107,7 +109,7 @@ function renderMapData(data) {
     document.getElementById('count-low').textContent = countLow;
 }
 
-// Filter & Pencarian
+// Filter & Pencarian Wilayah
 function filterData() {
     const searchText = document.getElementById('search-input').value.toLowerCase();
     const selectedRisk = document.getElementById('risk-filter').value;
@@ -124,7 +126,7 @@ function filterData() {
 document.getElementById('search-input').addEventListener('input', filterData);
 document.getElementById('risk-filter').addEventListener('change', filterData);
 
-// Form Kalkulator & Simulasi Menambah Wilayah Baru ke Peta
+// Simulasi Model Tabular saat Form Disubmit
 document.getElementById('risk-generator-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -133,7 +135,7 @@ document.getElementById('risk-generator-form').addEventListener('submit', functi
     const cases = parseFloat(document.getElementById('input-cases').value);
     const density = parseFloat(document.getElementById('input-density').value);
 
-    // Kalkulasi formula
+    // Kalkulasi Berbasis Logika Model Tabular (Feature Weights)
     const densityScore = Math.min((density / 25000) * 100, 100);
     const aqiScore = Math.min((aqi / 300) * 100, 100);
     const casesScore = Math.min((cases / 500) * 100, 100);
@@ -145,7 +147,7 @@ document.getElementById('risk-generator-form').addEventListener('submit', functi
     if (finalScore > 70) level = 'high';
     else if (finalScore >= 40) level = 'medium';
 
-    // Random koordinat di sekitar Surabaya untuk simulasi baru
+    // Random koordinat di sekitar area pemantauan untuk simulasi wilayah baru
     const randomLat = -7.2575 + (Math.random() - 0.5) * 0.08;
     const randomLng = 112.7521 + (Math.random() - 0.5) * 0.08;
 
@@ -165,7 +167,7 @@ document.getElementById('risk-generator-form').addEventListener('submit', functi
     renderMapData(ispaData);
     showRegionDetail(newItem);
 
-    // Reset form
+    // Reset Form
     this.reset();
     valAqi.textContent = "120";
     inputAqi.value = 120;
@@ -187,5 +189,5 @@ document.getElementById('btn-export').addEventListener('click', () => {
     document.body.removeChild(link);
 });
 
-// Render awal
+// Render Awal Peta
 renderMapData(ispaData);
