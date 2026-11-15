@@ -4,7 +4,7 @@ Platform pemantauan spasial dan simulasi prediktif risiko Infeksi Saluran Pernap
 
 ## 🚀 Fitur Utama
 
-`Beranda & Dokumentasi Sistem (index.html)`: Informasi latar belakang, definisi klinis ISPA, dan tujuan platform.
+Beranda & Dokumentasi Sistem (index.html): Informasi latar belakang, definisi klinis ISPA, dan tujuan platform.
 
 Peta Spasial & Generator Simulasi (generator.html): Peta interaktif berbasis Leaflet.js dengan filter wilayah dan kalkulator prediktif berbasis parameter AQI serta kepadatan penduduk.
 
@@ -20,9 +20,9 @@ Mapping Engine: Leaflet.js & CartoDB Basemaps
 
 Logika & Pemodelan: JavaScript (ES6+), scikit-learn (konsep pembobotan data tabular)
 
-##📂 Struktur Direktori Proyek
+## 📂 Struktur Direktori Proyek
 
-ARI-spread-risk-map\
+`ARI-spread-risk-map\
 │
 ├── css\
 │   └── bootstrap.min.css (dan berkas pendukung Bootstrap)
@@ -34,8 +34,7 @@ ARI-spread-risk-map\
     ├── generator.css
     ├── generator.js
     ├── about.html
-    └── about.css
-
+    └── about.css`
 
 ## ⚙️ Cara Menjalankan dan Mengakses Web
 
@@ -72,7 +71,7 @@ Logic & Modeling: JavaScript (ES6+), scikit-learn (tabular data weighting concep
 
 ## 📂 Project Directory Structure
 
-ARI-spread-risk-map\
+`ARI-spread-risk-map\
 │
 ├── css\
 │   └── bootstrap.min.css (and supporting Bootstrap files)
@@ -84,7 +83,7 @@ ARI-spread-risk-map\
     ├── generator.css
     ├── generator.js
     ├── about.html
-    └── about.css
+    └── about.css`
 
 
 ## ⚙️ How to Run and Access the Web Application
