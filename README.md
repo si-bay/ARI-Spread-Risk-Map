@@ -24,7 +24,7 @@ Logika & Pemodelan: `JavaScript (ES6+), scikit-learn (konsep pembobotan data tab
 
 Clone atau unduh repositori ini ke komputer Anda.
 
-Buka peramban (browser) dan jalankan berkas `pages/index.html` secara langsung, atau gunakan ekstensi Live Server di VS Code.
+Buka peramban (browser) dan jalankan berkas `index.html` secara langsung, atau gunakan ekstensi Live Server di VS Code.
 
 Anda juga dapat mengaksesnya melalui [link web.]() 
 
@@ -59,6 +59,6 @@ Logic & Modeling: `JavaScript (ES6+), scikit-learn (tabular data weighting conce
 
 Clone or download this repository to your computer.
 
-Open your web browser and run the `pages/index.html` file directly, or use the "Live Server" extension in VS Code.
+Open your web browser and run the `index.html` file directly, or use the "Live Server" extension in VS Code.
 
 You can also access it via [web link.]()
