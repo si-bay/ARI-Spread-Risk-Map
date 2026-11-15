@@ -28,8 +28,8 @@ Buka peramban (browser) dan jalankan berkas `pages/index.html` secara langsung, 
 
 Anda juga dapat mengaksesnya melalui [link web.]() 
 
-
-# English
+#
+# English Version
 
 # ARI (Acute Respiratory Infection) Spread Risk Map
 
