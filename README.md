@@ -1,8 +1,8 @@
-# 🦠 Peta Risiko Persebaran ISPA (ARI Spread Risk Map)
+# Peta Risiko Persebaran ISPA (ARI Spread Risk Map)
 
 Platform pemantauan spasial dan simulasi prediktif risiko Infeksi Saluran Pernapasan Akut (ISPA) berbasis lingkungan untuk mendukung mitigasi kesehatan masyarakat.
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 Beranda & Dokumentasi Sistem (`index.html`): Informasi latar belakang, definisi klinis ISPA, dan tujuan platform.
 
@@ -31,11 +31,11 @@ Anda juga dapat mengaksesnya melalui [link web.]()
 
 # English
 
-# 🦠 ARI (Acute Respiratory Infection) Spread Risk Map
+# ARI (Acute Respiratory Infection) Spread Risk Map
 
 An environmental-based spatial monitoring and predictive simulation platform for Acute Respiratory Infection (ARI) risks, designed to support public health mitigation efforts.
 
-## 🚀 Key Features
+## Key Features
 
 Home & System Documentation (`index.html`): Background information, clinical definitions of ARI, and the platform's objectives.
 
