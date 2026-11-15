@@ -30,6 +30,7 @@ Anda juga dapat mengaksesnya melalui [link web.]()
 
 #
 # English Version
+#
 
 # ARI (Acute Respiratory Infection) Spread Risk Map
 
@@ -45,7 +46,7 @@ Development Team Profile (`about.html`): Introductions to the collaborators, inc
 
 Spatial Data Export: The ability to download simulation dataset summaries in .csv format.
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 Frontend: `HTML5, CSS3, Bootstrap 5, Bootstrap Icons`
 
