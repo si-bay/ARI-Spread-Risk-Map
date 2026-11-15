@@ -1,4 +1,4 @@
-// --- GENERATOR.JS : ANALISIS SPASIAL GLOBAL & HIERARKI WILAYAH ---
+// --- GENERATOR.JS : MODEL RANDOM FOREST PYTHON DENGAN LOGIKA CADANGAN (FALLBACK) CERDAS ---
 
 // 1. Inisialisasi Peta (Berpusat secara global / world view - Tanpa API Key)
 const map = L.map('map').setView([15.0, 0.0], 2);
@@ -8,15 +8,17 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18
 }).addTo(map);
 
-// 2. Fungsi Kalkulasi Klasifikasi Menggunakan Bobot Model Random Forest
-function predictRiskByModel(aqi, cases, density, humidity) {
+// 2. Fungsi Prediksi Cadangan Cerdas (Berbasis Bobot Fitur Asli Random Forest Colab)
+// Digunakan secara otomatis jika server Python (.pkl) belum/tidak diaktifkan.
+function fallbackPredictByRFWeights(aqi, cases, densityVal, humidity) {
     const aqiScore = Math.min((aqi / 300) * 100, 100);
     const casesScore = Math.min((cases / 500) * 100, 100);
-    const densityScore = Math.min((density / 15000) * 100, 100);
+    const densityScore = Math.min((densityVal / 15000) * 100, 100);
     const humidityScore = Math.min((humidity / 100) * 100, 100);
 
-    let rawScore = (aqiScore * 0.722) + (casesScore * 0.260) + (densityScore * 0.009) + (humidityScore * 0.009);
-    let finalScore = Math.round(Math.min(Math.max(rawScore, 10), 99));
+    // Menggunakan bobot feature importance asli dari pelatihan Python
+    let rawScore = (aqiScore * 0.7223) + (casesScore * 0.2597) + (densityScore * 0.0093) + (humidityScore * 0.0087);
+    let finalScore = Math.round(Math.min(Math.max(rawScore * 1.1, 10), 99));
 
     let level = 'low';
     if (finalScore > 65) {
@@ -28,7 +30,7 @@ function predictRiskByModel(aqi, cases, density, humidity) {
     return { score: finalScore, level: level };
 }
 
-// 3. Dataset Spasial Global & Nasional (Negara > Provinsi > Kabupaten/Kota > Kecamatan)
+// 3. Dataset Spasial Mentah
 let ispaData = [
     // --- GLOBAL / INTERNASIONAL (PEMBANDING) ---
     { id: 101, country: "Malaysia", province: "Kuala Lumpur", city: "Kuala Lumpur", district: "Setapak", lat: 3.1890, lng: 101.7000, aqi: 85, cases: 90, density: "7.500/km²", humidity: 78 },
@@ -73,35 +75,76 @@ let ispaData = [
     { id: 21, country: "Indonesia", province: "Jawa Timur", city: "Kab. Banyuwangi", district: "Kec. Rogojampi", lat: -8.3200, lng: 114.3100, aqi: 45, cases: 35, density: "850/km²", humidity: 80 }
 ];
 
-// Terapkan model Random Forest ke setiap data
-ispaData.forEach(item => {
-    let densityVal = parseFloat(item.density.replace('.', '').replace('/km²', ''));
-    let prediction = predictRiskByModel(item.aqi, item.cases, densityVal, item.humidity);
-    item.riskScore = prediction.score;
-    item.level = prediction.level;
-});
-
 let markersLayer = L.layerGroup().addTo(map);
-let currentFilteredData = [...ispaData];
+let currentFilteredData = [];
+let isPythonModelActive = false; // Status penanda sumber model
 
-// Elemen DOM Dropdown Hierarki (Pastikan elemen HTML memiliki ID yang sesuai)
-const countrySelect = document.getElementById('country-select') || createDummySelect('country-select');
+// Elemen DOM Dropdown Hierarki
+const countrySelect = document.getElementById('country-select');
 const provinceSelect = document.getElementById('province-select');
 const citySelect = document.getElementById('city-select');
 const districtSelect = document.getElementById('district-select');
-const searchInput = document.getElementById('search-input');
 const riskFilter = document.getElementById('risk-filter');
 
-function createDummySelect(id) {
-    let el = document.createElement('select');
-    el.id = id;
-    return el;
+// 4. Fungsi Utama Penghubung Model (Python Flask atau Fallback Otomatis)
+async function initializeModelAndData() {
+    const detailBox = document.getElementById('region-detail');
+    if (detailBox) {
+        detailBox.innerHTML = `<h3>Memuat Analisis AI...</h3><p class="placeholder-text">Mendeteksi server model Random Forest Python...</p>`;
+    }
+
+    try {
+        // Coba hubungi server Flask lokal
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ regions: ispaData }),
+            signal: AbortSignal.timeout(2500) // Timeout cepat jika server tidak menyala
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            ispaData = result.data;
+            isPythonModelActive = true;
+            console.log("Berhasil terhubung ke Model Python (.pkl) Flask API.");
+        } else {
+            throw new Error("Format respons API tidak valid");
+        }
+    } catch (error) {
+        // --- LOGIKA JATUH / FALLBACK PINTAR ---
+        console.warn("Server Python tidak terdeteksi. Mengaktifkan Logika Cadangan Berbasis Bobot Random Forest (Standalone JS).");
+        isPythonModelActive = false;
+
+        ispaData.forEach(item => {
+            let densityVal = parseFloat(item.density.replace('.', '').replace('/km²', ''));
+            let fallbackResult = fallbackPredictByRFWeights(item.aqi, item.cases, densityVal, item.humidity);
+            item.riskScore = fallbackResult.score;
+            item.level = fallbackResult.level;
+        });
+    }
+
+    currentFilteredData = [...ispaData];
+    if (detailBox) {
+        const sourceBadge = isPythonModelActive 
+            ? '<span class="badge bg-success">Model Python (.pkl) Aktif</span>' 
+            : '<span class="badge bg-warning text-dark">Mode Standalone (Cadangan RF Aktif)</span>';
+
+        detailBox.innerHTML = `
+            <h3>Detail Wilayah</h3>
+            <p class="placeholder-text mb-2">Pilih daerah dari daftar atau klik titik pada peta untuk melihat analisis.</p>
+            <div>${sourceBadge}</div>
+        `;
+    }
+
+    initDropdowns();
+    renderMapData(currentFilteredData);
 }
 
 // Inisialisasi Opsi Negara & Provinsi
 function initDropdowns() {
     const countries = [...new Set(ispaData.map(item => item.country))];
-    if (countrySelect && countrySelect.options.length <= 1) {
+    if (countrySelect) {
         countrySelect.innerHTML = '<option value="all">-- Semua Negara --</option>';
         countries.forEach(cnt => {
             const opt = document.createElement('option');
@@ -120,7 +163,6 @@ function initDropdowns() {
         provinceSelect.appendChild(opt);
     });
 }
-initDropdowns();
 
 // Event Handler untuk Cascading Dropdown
 if (countrySelect) {
@@ -176,7 +218,6 @@ citySelect.addEventListener('change', function() {
 });
 
 districtSelect.addEventListener('change', filterData);
-if (searchInput) searchInput.addEventListener('input', filterData);
 riskFilter.addEventListener('change', filterData);
 
 // Warna & Label Risiko
@@ -197,13 +238,14 @@ function showRegionDetail(item) {
     const detailBox = document.getElementById('region-detail');
     if (!detailBox) return;
     const badgeColor = getRiskColor(item.level);
+    const modelSourceText = isPythonModelActive ? 'Model Python (.pkl)' : 'Cadangan RF (JS)';
     
     detailBox.innerHTML = `
         <h3>${item.district}</h3>
         <p class="small text-muted mb-2">${item.city}, ${item.province}, ${item.country}</p>
         <ul class="detail-list">
             <li>
-                <span>Status Risiko (Model RF)</span>
+                <span>Status Risiko (${modelSourceText})</span>
                 <strong style="color: ${badgeColor}">${getRiskLabel(item.level)} (${item.riskScore}/100)</strong>
             </li>
             <li>
@@ -265,33 +307,27 @@ function renderMapData(data) {
     if (elLow) elLow.textContent = countLow;
 }
 
-// Fungsi Filter Utama (Perbarui bagian di dalam filterData)
+// Fungsi Filter Utama
 function filterData() {
-    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedRisk = riskFilter ? riskFilter.value : 'all';
     const selectedCountry = countrySelect && countrySelect.value ? countrySelect.value : 'all';
     const selectedProv = provinceSelect.value;
     const selectedCity = citySelect.value;
     const selectedDist = districtSelect.value;
 
-    // Perbarui data yang terfilter berdasarkan pilihan user
     currentFilteredData = ispaData.filter(item => {
-        const matchesSearch = searchText === '' || 
-                              item.district.toLowerCase().includes(searchText) || 
-                              item.city.toLowerCase().includes(searchText) ||
-                              item.province.toLowerCase().includes(searchText);
         const matchesRisk = selectedRisk === 'all' || item.level === selectedRisk;
         const matchesCountry = selectedCountry === 'all' || item.country === selectedCountry;
         const matchesProv = selectedProv === 'all' || item.province === selectedProv;
         const matchesCity = selectedCity === 'all' || item.city === selectedCity;
         const matchesDist = selectedDist === 'all' || item.district === selectedDist;
 
-        return matchesSearch && matchesRisk && matchesCountry && matchesProv && matchesCity && matchesDist;
+        return matchesRisk && matchesCountry && matchesProv && matchesCity && matchesDist;
     });
 
     renderMapData(currentFilteredData);
 
-    // Penyesuaian Zoom Peta Otomatis Berdasarkan Filter Aktif
+    // Penyesuaian Zoom Peta Otomatis
     if (currentFilteredData.length > 0) {
         if (selectedDist !== 'all') {
             const target = currentFilteredData.find(i => i.district === selectedDist);
@@ -306,14 +342,15 @@ function filterData() {
             const target = currentFilteredData[0];
             map.setView([target.lat, target.lng], 7);
         } else if (selectedCountry !== 'all') {
-            map.setView([-2.5489, 118.0149], 5); 
+            const target = currentFilteredData[0];
+            map.setView([target.lat, target.lng], 5);
         } else {
-            map.setView([15.0, 0.0], 2); 
+            map.setView([15.0, 0.0], 2);
         }
     }
 }
 
-// Fitur Ekspor CSV (Diperbarui menggunakan currentFilteredData)
+// Fitur Ekspor CSV Sesuai Filter Aktif
 const btnExport = document.getElementById('btn-export');
 if (btnExport) {
     btnExport.addEventListener('click', () => {
@@ -324,7 +361,6 @@ if (btnExport) {
 
         let csvContent = "data:text/csv;charset=utf-8,ID,Negara,Provinsi,Kabupaten/Kota,Kecamatan,Skor Risiko,Tingkat Risiko,Kasus Mingguan,AQI (NASA),Kepadatan (WorldPop),Kelembapan\n";
         
-        // Mengekspor data sesuai hasil saringan/filter saat ini
         currentFilteredData.forEach(item => {
             csvContent += `"${item.id}","${item.country}","${item.province}","${item.city}","${item.district}","${item.riskScore}","${getRiskLabel(item.level)}","${item.cases}","${item.aqi}","${item.density}","${item.humidity}%"\n`;
         });
@@ -339,5 +375,5 @@ if (btnExport) {
     });
 }
 
-// Render Awal (Menampilkan Tampilan Global)
-renderMapData(ispaData);
+// Jalankan inisialisasi awal
+initializeModelAndData();
