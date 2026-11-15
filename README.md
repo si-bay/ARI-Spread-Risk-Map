@@ -12,7 +12,7 @@ Profil Tim Pengembang (`about.html`): Pengenalan kolaborator lengkap dengan taut
 
 Ekspor Data Spasial: Kemampuan mengunduh ringkasan dataset hasil simulasi ke dalam format .csv.
 
-##🛠️ Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 Frontend: HTML5, CSS3, [Bootstrap 5](), Bootstrap Icons
 
@@ -30,7 +30,7 @@ Anda juga dapat mengaksesnya melalui [link web.]()
 
 #
  
-# <ins> ** English Version ** </ins>
+# ** <ins>  English Version </ins> ** 
 
 # ARI (Acute Respiratory Infection) Spread Risk Map
 
