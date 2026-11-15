@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta Risiko & Generator Model ISPA</title>
+    <title>Peta Risiko Persebaran ISPA - Analisis Data Nyata</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <!-- Leaflet CSS untuk Peta (Tanpa API Key / Gratis) -->
@@ -26,42 +26,59 @@
                         <a class="nav-link" href="index.html">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="generator.html">Peta Risiko & Simulasi</a>
+                        <a class="nav-link active" href="generator.html">Peta Risiko & Analisis</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">Tentang Kami</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Menu Lainnya
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="generator.html#export">Ekspor Dataset CSV</a></li>
-                            <li><a class="dropdown-item" href="about.html#documentation">Dokumentasi Sistem</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="about.html#support">Bantuan & Kontak</a></li>
-                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Kontainer Utama Peta & Generator -->
+    <!-- Kontainer Utama Peta & Analisis -->
     <div class="app-container">
-        <!-- Sidebar Kontrol, Statistik, & Form Generator -->
+        <!-- Sidebar Kontrol & Pemilihan Daerah -->
         <aside class="sidebar">
             <header class="sidebar-header">
-                <h1>Peta Risiko & Simulasi</h1>
-                <p>Model Tabular Spasial & Kalkulator Wilayah</p>
+                <h1>Peta Risiko Spasial</h1>
+                <p>Analisis Berbasis Data Satelit NASA & WorldPop</p>
             </header>
 
-            <!-- Pencarian & Filter Peta -->
+            <!-- Pilihan Hierarki Wilayah Spasial -->
             <div class="control-group">
-                <label for="search-input">Cari Kecamatan / Wilayah</label>
-                <input type="text" id="search-input" class="form-control" placeholder="Ketik nama wilayah...">
+                <label for="country-select">Negara</label>
+                <select id="country-select" class="form-select form-select-sm">
+                    <option value="all">-- Semua Negara --</option>
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Malaysia">Malaysia</option>
+                    <option value="Thailand">Thailand</option>
+                    <option value="Singapore">Singapore</option>
+                </select>
             </div>
 
+            <div class="control-group">
+                <label for="province-select">Provinsi</label>
+                <select id="province-select" class="form-select form-select-sm">
+                    <option value="all">-- Semua Provinsi --</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="city-select">Kabupaten / Kota</label>
+                <select id="city-select" class="form-select form-select-sm">
+                    <option value="all">-- Semua Kabupaten/Kota --</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="district-select">Kecamatan</label>
+                <select id="district-select" class="form-select form-select-sm">
+                    <option value="all">-- Semua Kecamatan --</option>
+                </select>
+            </div>
+
+            <!-- Filter Tingkat Risiko -->
             <div class="control-group">
                 <label for="risk-filter">Filter Tingkat Risiko</label>
                 <select id="risk-filter" class="form-select">
@@ -91,30 +108,10 @@
                 </div>
             </div>
 
-            <!-- Form Generator & Simulasi Parameter Model Tabular -->
-            <div class="generator-box p-3 bg-light rounded-3 border">
-                <h3 class="h6 fw-bold mb-2">⚙️ Simulasi Model Tabular</h3>
-                <form id="risk-generator-form" class="d-flex flex-column gap-2">
-                    <input type="text" class="form-control form-control-sm" id="region-name" placeholder="Nama Wilayah baru" required>
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <label class="form-small text-muted" style="font-size: 0.75rem;">AQI (<span id="val-aqi">120</span>)</label>
-                            <input type="range" class="form-range" id="input-aqi" min="20" max="300" value="120">
-                        </div>
-                        <div class="col-6">
-                            <label class="form-small text-muted" style="font-size: 0.75rem;">Kasus Aktif</label>
-                            <input type="number" class="form-control form-control-sm" id="input-cases" min="0" max="1000" value="150" required>
-                        </div>
-                    </div>
-                    <input type="number" class="form-control form-control-sm" id="input-density" placeholder="Kepadatan (Jiwa/km²)" value="8500" required>
-                    <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">Jalankan Prediksi & Tambah ke Peta</button>
-                </form>
-            </div>
-
             <!-- Detail Wilayah Terpilih -->
             <div class="info-box" id="region-detail">
                 <h3>Detail Wilayah</h3>
-                <p class="placeholder-text">Klik titik pada peta untuk melihat detail kasus, kepadatan penduduk, dan kualitas udara.</p>
+                <p class="placeholder-text">Pilih daerah dari daftar atau klik titik pada peta untuk melihat analisis tingkat risiko, konsentrasi polutan, dan data kependudukan.</p>
             </div>
 
             <!-- Bagian Ekspor CSV -->
@@ -129,10 +126,10 @@
             
             <!-- Legenda Peta -->
             <div class="map-legend">
-                <h4>Indeks Risiko ISPA</h4>
-                <div class="legend-item"><span class="dot high"></span> Tinggi (Skor &gt; 70)</div>
-                <div class="legend-item"><span class="dot medium"></span> Sedang (Skor 40 - 70)</div>
-                <div class="legend-item"><span class="dot low"></span> Rendah (Skor &lt; 40)</div>
+                <h4>Indeks Risiko ISPA (NASA/WorldPop)</h4>
+                <div class="legend-item"><span class="dot high"></span> Tinggi (Risiko Karhutla Berat)</div>
+                <div class="legend-item"><span class="dot medium"></span> Sedang (Siaga Transisional)</div>
+                <div class="legend-item"><span class="dot low"></span> Rendah (Kualitas Udara Aman)</div>
             </div>
         </main>
     </div>

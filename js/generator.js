@@ -1,36 +1,185 @@
-// --- GENERATOR.JS : PETA SPASIAL & LOGIKA MODEL TABULAR ---
+// --- GENERATOR.JS : ANALISIS SPASIAL GLOBAL & HIERARKI WILAYAH ---
 
-// 1. Inisialisasi Peta (Default berpusat di Surabaya / Wilayah Pantauan - Tanpa API Key)
-const map = L.map('map').setView([-7.2575, 112.7521], 12);
+// 1. Inisialisasi Peta (Berpusat secara global / world view - Tanpa API Key)
+const map = L.map('map').setView([15.0, 0.0], 2);
 
-// Tambahkan Layer Peta Dasar Gratis (CartoDB Positron - Tidak Butuh Token/API Key)
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
     maxZoom: 18
 }).addTo(map);
 
-// 2. Dataset Awal Wilayah (Simulasi Data Tabular)
+// 2. Fungsi Kalkulasi Klasifikasi Menggunakan Bobot Model Random Forest
+function predictRiskByModel(aqi, cases, density, humidity) {
+    const aqiScore = Math.min((aqi / 300) * 100, 100);
+    const casesScore = Math.min((cases / 500) * 100, 100);
+    const densityScore = Math.min((density / 15000) * 100, 100);
+    const humidityScore = Math.min((humidity / 100) * 100, 100);
+
+    let rawScore = (aqiScore * 0.722) + (casesScore * 0.260) + (densityScore * 0.009) + (humidityScore * 0.009);
+    let finalScore = Math.round(Math.min(Math.max(rawScore, 10), 99));
+
+    let level = 'low';
+    if (finalScore > 65) {
+        level = 'high';
+    } else if (finalScore >= 35) {
+        level = 'medium';
+    }
+
+    return { score: finalScore, level: level };
+}
+
+// 3. Dataset Spasial Global & Nasional (Negara > Provinsi > Kabupaten/Kota > Kecamatan)
 let ispaData = [
-    { id: 1, name: "Kec. Gubeng", lat: -7.2756, lng: 112.7508, riskScore: 84, level: "high", cases: 342, aqi: 158, density: "14.200/km²" },
-    { id: 2, name: "Kec. Wonokromo", lat: -7.2981, lng: 112.7366, riskScore: 78, level: "high", cases: 295, aqi: 149, density: "16.500/km²" },
-    { id: 3, name: "Kec. Sukolilo", lat: -7.2912, lng: 112.7963, riskScore: 55, level: "medium", cases: 140, aqi: 112, density: "6.800/km²" },
-    { id: 4, name: "Kec. Rungkut", lat: -7.3215, lng: 112.7782, riskScore: 62, level: "medium", cases: 185, aqi: 125, density: "8.900/km²" },
-    { id: 5, name: "Kec. Genteng", lat: -7.2621, lng: 112.7420, riskScore: 74, level: "high", cases: 260, aqi: 145, density: "13.100/km²" },
-    { id: 6, name: "Kec. Benowo", lat: -7.2289, lng: 112.6345, riskScore: 31, level: "low", cases: 48, aqi: 72, density: "2.400/km²" },
-    { id: 7, name: "Kec. Lakarsantri", lat: -7.3054, lng: 112.6489, riskScore: 35, level: "low", cases: 52, aqi: 68, density: "3.100/km²" },
-    { id: 8, name: "Kec. Tegalsari", lat: -7.2718, lng: 112.7354, riskScore: 67, level: "medium", cases: 210, aqi: 130, density: "15.400/km²" }
+    // --- GLOBAL / INTERNASIONAL (PEMBANDING) ---
+    { id: 101, country: "Malaysia", province: "Kuala Lumpur", city: "Kuala Lumpur", district: "Setapak", lat: 3.1890, lng: 101.7000, aqi: 85, cases: 90, density: "7.500/km²", humidity: 78 },
+    { id: 102, country: "Thailand", province: "Bangkok", city: "Bangkok Metropolitan", district: "Pathum Wan", lat: 13.7460, lng: 100.5330, aqi: 155, cases: 260, density: "12.000/km²", humidity: 65 },
+    { id: 103, country: "Singapore", province: "Central Singapore", city: "Singapore City", district: "Downtown Core", lat: 1.2868, lng: 103.8545, aqi: 45, cases: 20, density: "8.000/km²", humidity: 80 },
+
+    // --- INDONESIA: RIAU ---
+    { id: 1, country: "Indonesia", province: "Riau", city: "Kota Pekanbaru", district: "Kec. Tampan", lat: 0.4500, lng: 101.3800, aqi: 185, cases: 380, density: "1.250/km²", humidity: 55 },
+    { id: 2, country: "Indonesia", province: "Riau", city: "Kota Pekanbaru", district: "Kec. Bukit Raya", lat: 0.4900, lng: 101.4600, aqi: 170, cases: 310, density: "1.420/km²", humidity: 57 },
+    { id: 3, country: "Indonesia", province: "Riau", city: "Kota Dumai", district: "Kec. Dumai Timur", lat: 1.6833, lng: 101.4500, aqi: 210, cases: 410, density: "850/km²", humidity: 50 },
+    { id: 4, country: "Indonesia", province: "Riau", city: "Kab. Bengkalis", district: "Kec. Mandau", lat: 1.2500, lng: 101.5000, aqi: 195, cases: 350, density: "780/km²", humidity: 53 },
+
+    // --- INDONESIA: KALIMANTAN TENGAH ---
+    { id: 5, country: "Indonesia", province: "Kalimantan Tengah", city: "Kota Palangkaraya", district: "Kec. Pahandut", lat: -2.2100, lng: 113.9166, aqi: 160, cases: 290, density: "620/km²", humidity: 60 },
+    { id: 6, country: "Indonesia", province: "Kalimantan Tengah", city: "Kota Palangkaraya", district: "Kec. Jekan Raya", lat: -2.2200, lng: 113.9300, aqi: 165, cases: 305, density: "710/km²", humidity: 59 },
+    { id: 7, country: "Indonesia", province: "Kalimantan Tengah", city: "Kab. Kotawaringin Timur", district: "Kec. Mentawa Baru Ketapang", lat: -2.5333, lng: 112.9500, aqi: 180, cases: 340, density: "540/km²", humidity: 56 },
+
+    // --- INDONESIA: KALIMANTAN BARAT ---
+    { id: 8, country: "Indonesia", province: "Kalimantan Barat", city: "Kota Pontianak", district: "Kec. Pontianak Kota", lat: -0.0263, lng: 109.3425, aqi: 140, cases: 245, density: "4.100/km²", humidity: 65 },
+    { id: 9, country: "Indonesia", province: "Kalimantan Barat", city: "Kota Pontianak", district: "Kec. Pontianak Selatan", lat: -0.0500, lng: 109.3300, aqi: 135, cases: 220, density: "3.900/km²", humidity: 66 },
+    { id: 10, country: "Indonesia", province: "Kalimantan Barat", city: "Kab. Kubu Raya", district: "Kec. Sungai Raya", lat: -0.1500, lng: 109.4000, aqi: 150, cases: 270, density: "950/km²", humidity: 63 },
+
+    // --- INDONESIA: KALIMANTAN SELATAN ---
+    { id: 11, country: "Indonesia", province: "Kalimantan Selatan", city: "Kota Banjarmasin", district: "Kec. Banjarmasin Tengah", lat: -3.3166, lng: 114.5901, aqi: 95, cases: 130, density: "9.800/km²", humidity: 75 },
+    { id: 12, country: "Indonesia", province: "Kalimantan Selatan", city: "Kota Banjarbaru", district: "Kec. Banjarbaru Utara", lat: -3.4442, lng: 114.8289, aqi: 88, cases: 110, density: "2.100/km²", humidity: 77 },
+
+    // --- INDONESIA: JAMBI ---
+    { id: 13, country: "Indonesia", province: "Jambi", city: "Kota Jambi", district: "Kec. Telanaipura", lat: -1.6101, lng: 103.6131, aqi: 175, cases: 310, density: "2.400/km²", humidity: 58 },
+    { id: 14, country: "Indonesia", province: "Jambi", city: "Kota Jambi", district: "Kec. Jambi Selatan", lat: -1.6300, lng: 103.6000, aqi: 168, cases: 295, density: "2.800/km²", humidity: 60 },
+
+    // --- INDONESIA: KALIMANTAN TIMUR ---
+    { id: 15, country: "Indonesia", province: "Kalimantan Timur", city: "Kota Samarinda", district: "Kec. Samarinda Ulu", lat: -0.5022, lng: 117.1537, aqi: 65, cases: 85, density: "1.800/km²", humidity: 80 },
+    { id: 16, country: "Indonesia", province: "Kalimantan Timur", city: "Kota Balikpapan", district: "Kec. Balikpapan Selatan", lat: -1.2654, lng: 116.8312, aqi: 50, cases: 45, density: "3.500/km²", humidity: 83 },
+
+    // --- INDONESIA: DKI JAKARTA ---
+    { id: 17, country: "Indonesia", province: "DKI Jakarta", city: "Kota Jakarta Pusat", district: "Kec. Menteng", lat: -6.1751, lng: 106.8650, aqi: 110, cases: 190, density: "19.500/km²", humidity: 70 },
+    { id: 18, country: "Indonesia", province: "DKI Jakarta", city: "Kota Jakarta Selatan", district: "Kec. Kebayoran Baru", lat: -6.2415, lng: 106.7994, aqi: 105, cases: 175, density: "14.200/km²", humidity: 72 },
+
+    // --- INDONESIA: JAWA TIMUR ---
+    { id: 19, country: "Indonesia", province: "Jawa Timur", city: "Kota Surabaya", district: "Kec. Gubeng", lat: -7.2756, lng: 112.7508, aqi: 75, cases: 95, density: "8.400/km²", humidity: 72 },
+    { id: 20, country: "Indonesia", province: "Jawa Timur", city: "Kab. Banyuwangi", district: "Kec. Banyuwangi", lat: -8.2192, lng: 114.3691, aqi: 42, cases: 30, density: "720/km²", humidity: 82 },
+    { id: 21, country: "Indonesia", province: "Jawa Timur", city: "Kab. Banyuwangi", district: "Kec. Rogojampi", lat: -8.3200, lng: 114.3100, aqi: 45, cases: 35, density: "850/km²", humidity: 80 }
 ];
 
-let markersLayer = L.layerGroup().addTo(map);
-
-// Live Slider AQI
-const inputAqi = document.getElementById('input-aqi');
-const valAqi = document.getElementById('val-aqi');
-inputAqi.addEventListener('input', () => {
-    valAqi.textContent = inputAqi.value;
+// Terapkan model Random Forest ke setiap data
+ispaData.forEach(item => {
+    let densityVal = parseFloat(item.density.replace('.', '').replace('/km²', ''));
+    let prediction = predictRiskByModel(item.aqi, item.cases, densityVal, item.humidity);
+    item.riskScore = prediction.score;
+    item.level = prediction.level;
 });
 
-// Fungsi Warna & Label Risiko
+let markersLayer = L.layerGroup().addTo(map);
+let currentFilteredData = [...ispaData];
+
+// Elemen DOM Dropdown Hierarki (Pastikan elemen HTML memiliki ID yang sesuai)
+const countrySelect = document.getElementById('country-select') || createDummySelect('country-select');
+const provinceSelect = document.getElementById('province-select');
+const citySelect = document.getElementById('city-select');
+const districtSelect = document.getElementById('district-select');
+const searchInput = document.getElementById('search-input');
+const riskFilter = document.getElementById('risk-filter');
+
+function createDummySelect(id) {
+    let el = document.createElement('select');
+    el.id = id;
+    return el;
+}
+
+// Inisialisasi Opsi Negara & Provinsi
+function initDropdowns() {
+    const countries = [...new Set(ispaData.map(item => item.country))];
+    if (countrySelect && countrySelect.options.length <= 1) {
+        countrySelect.innerHTML = '<option value="all">-- Semua Negara --</option>';
+        countries.forEach(cnt => {
+            const opt = document.createElement('option');
+            opt.value = cnt;
+            opt.textContent = cnt;
+            countrySelect.appendChild(opt);
+        });
+    }
+
+    provinceSelect.innerHTML = '<option value="all">-- Semua Provinsi --</option>';
+    const provinces = [...new Set(ispaData.map(item => item.province))];
+    provinces.forEach(prov => {
+        const opt = document.createElement('option');
+        opt.value = prov;
+        opt.textContent = prov;
+        provinceSelect.appendChild(opt);
+    });
+}
+initDropdowns();
+
+// Event Handler untuk Cascading Dropdown
+if (countrySelect) {
+    countrySelect.addEventListener('change', function() {
+        const selectedCountry = this.value;
+        provinceSelect.innerHTML = '<option value="all">-- Semua Provinsi --</option>';
+        citySelect.innerHTML = '<option value="all">-- Semua Kabupaten/Kota --</option>';
+        districtSelect.innerHTML = '<option value="all">-- Semua Kecamatan --</option>';
+
+        let filteredProv = selectedCountry === 'all' ? ispaData : ispaData.filter(i => i.country === selectedCountry);
+        let provinces = [...new Set(filteredProv.map(i => i.province))];
+        provinces.forEach(prov => {
+            const opt = document.createElement('option');
+            opt.value = prov;
+            opt.textContent = prov;
+            provinceSelect.appendChild(opt);
+        });
+        filterData();
+    });
+}
+
+provinceSelect.addEventListener('change', function() {
+    const selectedProv = this.value;
+    citySelect.innerHTML = '<option value="all">-- Semua Kabupaten/Kota --</option>';
+    districtSelect.innerHTML = '<option value="all">-- Semua Kecamatan --</option>';
+
+    if (selectedProv !== 'all') {
+        const cities = [...new Set(ispaData.filter(i => i.province === selectedProv).map(i => i.city))];
+        cities.forEach(city => {
+            const opt = document.createElement('option');
+            opt.value = city;
+            opt.textContent = city;
+            citySelect.appendChild(opt);
+        });
+    }
+    filterData();
+});
+
+citySelect.addEventListener('change', function() {
+    const selectedCity = this.value;
+    districtSelect.innerHTML = '<option value="all">-- Semua Kecamatan --</option>';
+
+    if (selectedCity !== 'all') {
+        const districts = [...new Set(ispaData.filter(i => i.city === selectedCity).map(i => i.district))];
+        districts.forEach(dist => {
+            const opt = document.createElement('option');
+            opt.value = dist;
+            opt.textContent = dist;
+            districtSelect.appendChild(opt);
+        });
+    }
+    filterData();
+});
+
+districtSelect.addEventListener('change', filterData);
+if (searchInput) searchInput.addEventListener('input', filterData);
+riskFilter.addEventListener('change', filterData);
+
+// Warna & Label Risiko
 function getRiskColor(level) {
     if (level === 'high') return '#ef4444';
     if (level === 'medium') return '#f59e0b';
@@ -46,35 +195,40 @@ function getRiskLabel(level) {
 // Menampilkan Detail di Sidebar
 function showRegionDetail(item) {
     const detailBox = document.getElementById('region-detail');
+    if (!detailBox) return;
     const badgeColor = getRiskColor(item.level);
     
     detailBox.innerHTML = `
-        <h3>Detail: ${item.name}</h3>
+        <h3>${item.district}</h3>
+        <p class="small text-muted mb-2">${item.city}, ${item.province}, ${item.country}</p>
         <ul class="detail-list">
             <li>
-                <span>Status Risiko (Model Tabular)</span>
+                <span>Status Risiko (Model RF)</span>
                 <strong style="color: ${badgeColor}">${getRiskLabel(item.level)} (${item.riskScore}/100)</strong>
             </li>
             <li>
-                <span>Kasus Aktif ISPA</span>
+                <span>Kasus Aktif Mingguan</span>
                 <strong>${item.cases} Kasus</strong>
             </li>
             <li>
-                <span>Indeks Polusi (AQI / Karhutla)</span>
-                <strong>${item.aqi}</strong>
+                <span>AQI / PM2.5 (NASA GEOS-CF)</span>
+                <strong>${item.aqi} µg/m³</strong>
             </li>
             <li>
-                <span>Kepadatan Penduduk</span>
+                <span>Kepadatan (WorldPop 2020)</span>
                 <strong>${item.density}</strong>
+            </li>
+            <li>
+                <span>Kelembapan Udara</span>
+                <strong>${item.humidity}%</strong>
             </li>
         </ul>
     `;
 }
 
-// Merender Peta & Statistik
+// Render Peta & Statistik
 function renderMapData(data) {
     markersLayer.clearLayers();
-
     let countHigh = 0, countMedium = 0, countLow = 0;
 
     data.forEach(item => {
@@ -83,18 +237,17 @@ function renderMapData(data) {
         else countLow++;
 
         const color = getRiskColor(item.level);
-
         const circle = L.circle([item.lat, item.lng], {
             color: color,
             fillColor: color,
-            fillOpacity: 0.35,
-            radius: item.riskScore * 15
+            fillOpacity: 0.4,
+            radius: item.riskScore * 18
         });
 
         circle.bindPopup(`
-            <strong>${item.name}</strong><br>
+            <strong>${item.district}, ${item.city}</strong><br>
             Risiko: <b>${getRiskLabel(item.level)}</b> (Skor: ${item.riskScore})<br>
-            Kasus: ${item.cases}
+            AQI NASA: ${item.aqi} | Kasus: ${item.cases}
         `);
 
         circle.on('click', () => {
@@ -104,90 +257,87 @@ function renderMapData(data) {
         markersLayer.addLayer(circle);
     });
 
-    document.getElementById('count-high').textContent = countHigh;
-    document.getElementById('count-medium').textContent = countMedium;
-    document.getElementById('count-low').textContent = countLow;
+    const elHigh = document.getElementById('count-high');
+    const elMed = document.getElementById('count-medium');
+    const elLow = document.getElementById('count-low');
+    if (elHigh) elHigh.textContent = countHigh;
+    if (elMed) elMed.textContent = countMedium;
+    if (elLow) elLow.textContent = countLow;
 }
 
-// Filter & Pencarian Wilayah
+// Fungsi Filter Utama (Perbarui bagian di dalam filterData)
 function filterData() {
-    const searchText = document.getElementById('search-input').value.toLowerCase();
-    const selectedRisk = document.getElementById('risk-filter').value;
+    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const selectedRisk = riskFilter ? riskFilter.value : 'all';
+    const selectedCountry = countrySelect && countrySelect.value ? countrySelect.value : 'all';
+    const selectedProv = provinceSelect.value;
+    const selectedCity = citySelect.value;
+    const selectedDist = districtSelect.value;
 
-    const filtered = ispaData.filter(item => {
-        const matchesName = item.name.toLowerCase().includes(searchText);
+    // Perbarui data yang terfilter berdasarkan pilihan user
+    currentFilteredData = ispaData.filter(item => {
+        const matchesSearch = searchText === '' || 
+                              item.district.toLowerCase().includes(searchText) || 
+                              item.city.toLowerCase().includes(searchText) ||
+                              item.province.toLowerCase().includes(searchText);
         const matchesRisk = selectedRisk === 'all' || item.level === selectedRisk;
-        return matchesName && matchesRisk;
+        const matchesCountry = selectedCountry === 'all' || item.country === selectedCountry;
+        const matchesProv = selectedProv === 'all' || item.province === selectedProv;
+        const matchesCity = selectedCity === 'all' || item.city === selectedCity;
+        const matchesDist = selectedDist === 'all' || item.district === selectedDist;
+
+        return matchesSearch && matchesRisk && matchesCountry && matchesProv && matchesCity && matchesDist;
     });
 
-    renderMapData(filtered);
+    renderMapData(currentFilteredData);
+
+    // Penyesuaian Zoom Peta Otomatis Berdasarkan Filter Aktif
+    if (currentFilteredData.length > 0) {
+        if (selectedDist !== 'all') {
+            const target = currentFilteredData.find(i => i.district === selectedDist);
+            if (target) {
+                map.setView([target.lat, target.lng], 12);
+                showRegionDetail(target);
+            }
+        } else if (selectedCity !== 'all') {
+            const target = currentFilteredData[0];
+            map.setView([target.lat, target.lng], 9);
+        } else if (selectedProv !== 'all') {
+            const target = currentFilteredData[0];
+            map.setView([target.lat, target.lng], 7);
+        } else if (selectedCountry !== 'all') {
+            map.setView([-2.5489, 118.0149], 5); 
+        } else {
+            map.setView([15.0, 0.0], 2); 
+        }
+    }
 }
 
-document.getElementById('search-input').addEventListener('input', filterData);
-document.getElementById('risk-filter').addEventListener('change', filterData);
+// Fitur Ekspor CSV (Diperbarui menggunakan currentFilteredData)
+const btnExport = document.getElementById('btn-export');
+if (btnExport) {
+    btnExport.addEventListener('click', () => {
+        if (currentFilteredData.length === 0) {
+            alert("Tidak ada data wilayah yang sesuai untuk diekspor!");
+            return;
+        }
 
-// Simulasi Model Tabular saat Form Disubmit
-document.getElementById('risk-generator-form').addEventListener('submit', function(e) {
-    e.preventDefault();
+        let csvContent = "data:text/csv;charset=utf-8,ID,Negara,Provinsi,Kabupaten/Kota,Kecamatan,Skor Risiko,Tingkat Risiko,Kasus Mingguan,AQI (NASA),Kepadatan (WorldPop),Kelembapan\n";
+        
+        // Mengekspor data sesuai hasil saringan/filter saat ini
+        currentFilteredData.forEach(item => {
+            csvContent += `"${item.id}","${item.country}","${item.province}","${item.city}","${item.district}","${item.riskScore}","${getRiskLabel(item.level)}","${item.cases}","${item.aqi}","${item.density}","${item.humidity}%"\n`;
+        });
 
-    const name = document.getElementById('region-name').value;
-    const aqi = parseFloat(inputAqi.value);
-    const cases = parseFloat(document.getElementById('input-cases').value);
-    const density = parseFloat(document.getElementById('input-density').value);
-
-    // Kalkulasi Berbasis Logika Model Tabular (Feature Weights)
-    const densityScore = Math.min((density / 25000) * 100, 100);
-    const aqiScore = Math.min((aqi / 300) * 100, 100);
-    const casesScore = Math.min((cases / 500) * 100, 100);
-
-    let rawScore = (aqiScore * 0.4) + (casesScore * 0.35) + (densityScore * 0.25);
-    let finalScore = Math.round(Math.min(Math.max(rawScore, 10), 99));
-
-    let level = 'low';
-    if (finalScore > 70) level = 'high';
-    else if (finalScore >= 40) level = 'medium';
-
-    // Random koordinat di sekitar area pemantauan untuk simulasi wilayah baru
-    const randomLat = -7.2575 + (Math.random() - 0.5) * 0.08;
-    const randomLng = 112.7521 + (Math.random() - 0.5) * 0.08;
-
-    const newItem = {
-        id: ispaData.length + 1,
-        name: name,
-        lat: randomLat,
-        lng: randomLng,
-        riskScore: finalScore,
-        level: level,
-        cases: cases,
-        aqi: aqi,
-        density: density.toLocaleString() + '/km²'
-    };
-
-    ispaData.push(newItem);
-    renderMapData(ispaData);
-    showRegionDetail(newItem);
-
-    // Reset Form
-    this.reset();
-    valAqi.textContent = "120";
-    inputAqi.value = 120;
-});
-
-// Fitur Ekspor CSV
-document.getElementById('btn-export').addEventListener('click', () => {
-    let csvContent = "data:text/csv;charset=utf-8,ID,Wilayah,Skor Risiko,Tingkat,Kasus,AQI,Kepadatan\n";
-    ispaData.forEach(item => {
-        csvContent += `"${item.id}","${item.name}","${item.riskScore}","${getRiskLabel(item.level)}","${item.cases}","${item.aqi}","${item.density}"\n`;
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "analisis_risiko_ispa_terpilih.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
+}
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "dataset_peta_risiko_ispa.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
-
-// Render Awal Peta
+// Render Awal (Menampilkan Tampilan Global)
 renderMapData(ispaData);
