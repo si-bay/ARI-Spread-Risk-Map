@@ -4,7 +4,7 @@ Platform pemantauan spasial dan simulasi prediktif risiko Infeksi Saluran Pernap
 
 ## 🚀 Fitur Utama
 
-Beranda & Dokumentasi Sistem (index.html): Informasi latar belakang, definisi klinis ISPA, dan tujuan platform.
+`Beranda & Dokumentasi Sistem (index.html)`: Informasi latar belakang, definisi klinis ISPA, dan tujuan platform.
 
 Peta Spasial & Generator Simulasi (generator.html): Peta interaktif berbasis Leaflet.js dengan filter wilayah dan kalkulator prediktif berbasis parameter AQI serta kepadatan penduduk.
 
