@@ -20,7 +20,7 @@ Mapping Engine: `Leaflet.js & CartoDB Basemaps`
 
 Logika & Pemodelan: JavaScript (ES6+), scikit-learn (konsep pembobotan data tabular)
 
-## ⚙️ Cara Menjalankan dan Mengakses Web
+## Cara Menjalankan dan Mengakses Web
 
 Clone atau unduh repositori ini ke komputer Anda.
 
@@ -55,7 +55,7 @@ Mapping Engine: `Leaflet.js & CartoDB Basemaps`
 Logic & Modeling: JavaScript (ES6+), scikit-learn (tabular data weighting concepts)
 
 
-## ⚙️ How to Run and Access the Web Application
+## How to Run and Access the Web Application
 
 Clone or download this repository to your computer.
 
