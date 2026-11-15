@@ -30,9 +30,7 @@ Anda juga dapat mengaksesnya melalui [link web.]()
 
 #
  
-## English Version
-
-#
+# <ins> ** English Version ** </ins>
 
 # ARI (Acute Respiratory Infection) Spread Risk Map
 
