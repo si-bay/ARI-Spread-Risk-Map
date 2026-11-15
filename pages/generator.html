@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta Risiko Persebaran ISPA - Analisis Data Nyata</title>
-    <!-- Bootstrap CSS -->
+    <title>ARI Spread Risk Map - Real Data Analysis</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <!-- Leaflet CSS untuk Peta (Tanpa API Key / Gratis) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/generator.css">
 </head>
 <body>
 
-    <!-- Navbar Standar Navigasi Antarhalaman -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container-fluid px-4">
             <a class="navbar-brand fw-bold" href="index.html">🦠 ISPA Risk Map</a>
@@ -23,33 +19,30 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Beranda</a>
+                        <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="generator.html">Peta Risiko & Analisis</a>
+                        <a class="nav-link active" href="generator.html">Risk Map & Analysis</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">Tentang Kami</a>
+                        <a class="nav-link" href="about.html">About Us</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Kontainer Utama Peta & Analisis -->
     <div class="app-container">
-        <!-- Sidebar Kontrol & Pemilihan Daerah -->
         <aside class="sidebar">
             <header class="sidebar-header">
-                <h1>Peta Risiko Spasial</h1>
-                <p>Analisis Berbasis Data Satelit NASA & WorldPop</p>
+                <h1>Spatial Risk Map</h1>
+                <p>Analysis Based on NASA Satellite & WorldPop Data</p>
             </header>
 
-            <!-- Pilihan Hierarki Wilayah Spasial -->
             <div class="control-group">
-                <label for="country-select">Negara</label>
+                <label for="country-select">Country</label>
                 <select id="country-select" class="form-select form-select-sm">
-                    <option value="all">-- Semua Negara --</option>
+                    <option value="all">-- All Countries --</option>
                     <option value="Indonesia">Indonesia</option>
                     <option value="Malaysia">Malaysia</option>
                     <option value="Thailand">Thailand</option>
@@ -58,87 +51,78 @@
             </div>
 
             <div class="control-group">
-                <label for="province-select">Provinsi</label>
+                <label for="province-select">Province</label>
                 <select id="province-select" class="form-select form-select-sm">
-                    <option value="all">-- Semua Provinsi --</option>
+                    <option value="all">-- All Provinces --</option>
                 </select>
             </div>
 
             <div class="control-group">
-                <label for="city-select">Kabupaten / Kota</label>
+                <label for="city-select">Regency / City</label>
                 <select id="city-select" class="form-select form-select-sm">
-                    <option value="all">-- Semua Kabupaten/Kota --</option>
+                    <option value="all">-- All Regencies/Cities --</option>
                 </select>
             </div>
 
             <div class="control-group">
-                <label for="district-select">Kecamatan</label>
+                <label for="district-select">District</label>
                 <select id="district-select" class="form-select form-select-sm">
-                    <option value="all">-- Semua Kecamatan --</option>
+                    <option value="all">-- All Districts --</option>
                 </select>
             </div>
 
-            <!-- Filter Tingkat Risiko -->
             <div class="control-group">
-                <label for="risk-filter">Filter Tingkat Risiko</label>
+                <label for="risk-filter">Risk Level Filter</label>
                 <select id="risk-filter" class="form-select">
-                    <option value="all">Semua Tingkat Risiko</option>
-                    <option value="high">Risiko Tinggi</option>
-                    <option value="medium">Risiko Sedang</option>
-                    <option value="low">Risiko Rendah</option>
+                    <option value="all">All Risk Levels</option>
+                    <option value="high">High Risk</option>
+                    <option value="medium">Medium Risk</option>
+                    <option value="low">Low Risk</option>
                 </select>
             </div>
 
-            <!-- Ringkasan Data Peta -->
             <div class="stats-panel">
-                <h3>Ringkasan Wilayah Terpantau</h3>
+                <h3>Monitored Region Summary</h3>
                 <div class="stat-cards">
                     <div class="stat-card high">
                         <span class="stat-value" id="count-high">0</span>
-                        <span class="stat-label">Tinggi</span>
+                        <span class="stat-label">High</span>
                     </div>
                     <div class="stat-card medium">
                         <span class="stat-value" id="count-medium">0</span>
-                        <span class="stat-label">Sedang</span>
+                        <span class="stat-label">Medium</span>
                     </div>
                     <div class="stat-card low">
                         <span class="stat-value" id="count-low">0</span>
-                        <span class="stat-label">Rendah</span>
+                        <span class="stat-label">Low</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Detail Wilayah Terpilih -->
             <div class="info-box" id="region-detail">
-                <h3>Detail Wilayah</h3>
-                <p class="placeholder-text">Pilih daerah dari daftar atau klik titik pada peta untuk melihat analisis tingkat risiko, konsentrasi polutan, dan data kependudukan.</p>
+                <h3>Region Details</h3>
+                <p class="placeholder-text">Select a region from the list or click a point on the map to view risk level analysis, pollutant concentration, and demographic data.</p>
             </div>
 
-            <!-- Bagian Ekspor CSV -->
             <div id="export-section" class="mt-2">
-                <button id="btn-export" class="btn btn-outline-success btn-sm w-100 fw-semibold">📥 Ekspor Dataset ke CSV</button>
+                <button id="btn-export" class="btn btn-outline-success btn-sm w-100 fw-semibold">📥 Export Dataset to CSV</button>
             </div>
         </aside>
 
-        <!-- Area Utama Peta Spasial (Bebas API Key) -->
         <main class="map-wrapper">
             <div id="map"></div>
             
-            <!-- Legenda Peta -->
             <div class="map-legend">
-                <h4>Indeks Risiko ISPA (NASA/WorldPop)</h4>
-                <div class="legend-item"><span class="dot high"></span> Tinggi (Risiko Karhutla Berat)</div>
-                <div class="legend-item"><span class="dot medium"></span> Sedang (Siaga Transisional)</div>
-                <div class="legend-item"><span class="dot low"></span> Rendah (Kualitas Udara Aman)</div>
+                <h4>ARI Risk Index (NASA/WorldPop)</h4>
+                <div class="legend-item"><span class="dot high"></span> High (Severe Forest Fire Risk)</div>
+                <div class="legend-item"><span class="dot medium"></span> Medium (Transitional Alert)</div>
+                <div class="legend-item"><span class="dot low"></span> Low (Safe Air Quality)</div>
             </div>
         </main>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Leaflet JS (Tanpa API Key) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Custom JS -->
     <script src="../js/generator.js"></script>
 </body>
 </html>

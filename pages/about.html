@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tentang Tim Pengembang - Peta Risiko ISPA</title>
-    <!-- Bootstrap CSS -->
+    <title>About Development Team - ARI Risk Map</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <!-- Bootstrap Icons untuk Sosmed -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/about.css">
 </head>
 <body>
 
-    <!-- Navbar Standar Navigasi Antarhalaman -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container-fluid px-4">
             <a class="navbar-brand fw-bold" href="index.html">🦠 ISPA Risk Map</a>
@@ -23,44 +19,39 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Beranda</a>
+                        <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="generator.html">Peta Risiko & Analisis</a>
+                        <a class="nav-link" href="generator.html">Risk Map & Analysis</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="about.html">Tentang Kami</a>
+                        <a class="nav-link active" href="about.html">About Us</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Kontainer Utama Halaman About (Murni Tim Pengembang) -->
     <div class="container my-5">
         
-        <!-- Bagian: Profil Tim Pengembang -->
         <section class="mb-5" id="support">
             <div class="text-center mb-5">
-                <span class="badge bg-success mb-2 px-3 py-2 rounded-pill">Tim Pengembang</span>
-                <h1 class="fw-bold">Kenali Tim Di Balik Layar</h1>
-                <p class="text-muted">Tiga kolaborator berdedikasi dalam perancangan arsitektur dan antarmuka sistem.</p>
+                <span class="badge bg-success mb-2 px-3 py-2 rounded-pill">Development Team</span>
+                <h1 class="fw-bold">Meet the Team Behind the Scenes</h1>
+                <p class="text-muted">Three dedicated collaborators in system architecture and interface design.</p>
                 
-                <!-- Kontrol Pengatur Bingkai Wajah (Frame Customizer) -->
                 <div class="mt-4 d-inline-flex align-items-center gap-2 bg-light p-2 rounded-3 border shadow-sm">
-                    <label for="frame-shape-select" class="form-label small fw-bold mb-0 text-secondary">Ubah Bingkai Wajah:</label>
+                    <label for="frame-shape-select" class="form-label small fw-bold mb-0 text-secondary">Change Avatar Frame:</label>
                     <select id="frame-shape-select" class="form-select form-select-sm w-auto">
-                        <option value="circle">Lingkaran Sempurna (Circle)</option>
-                        <option value="rounded">Sudut Melengkung (Rounded Square)</option>
-                        <option value="octagon">Segi Delapan (Octagon)</option>
+                        <option value="circle">Perfect Circle</option>
+                        <option value="rounded">Rounded Square</option>
+                        <option value="octagon">Octagon</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Grid Anggota Tim (3 Orang) -->
             <div class="row g-4 justify-content-center">
                 
-                <!-- Anggota 1 -->
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm h-100 text-center p-4 team-card">
                         <div class="avatar-container mx-auto mb-3">
@@ -68,7 +59,7 @@
                         </div>
                         <h4 class="fw-bold mb-1">Ahmad Fahrur Rosi</h4>
                         <span class="badge bg-primary-subtle text-primary mb-3 mx-auto">Lead Fullstack Developer</span>
-                        <p class="text-muted small mb-4">Bertanggung jawab atas logika pemodelan spasial, integrasi peta Leaflet, dan arsitektur sistem.</p>
+                        <p class="text-muted small mb-4">Responsible for spatial modeling logic, Leaflet map integration, and system architecture.</p>
                         <div class="d-flex justify-content-center gap-2 mt-auto">
                             <a href="https://github.com/forros9" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
                                 <i class="bi bi-github"></i> GitHub
@@ -80,7 +71,6 @@
                     </div>
                 </div>
 
-                <!-- Anggota 2 -->
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm h-100 text-center p-4 team-card">
                         <div class="avatar-container mx-auto mb-3">
@@ -88,7 +78,7 @@
                         </div>
                         <h4 class="fw-bold mb-1">Bayu Laksana al-Hasani</h4>
                         <span class="badge bg-success-subtle text-success mb-3 mx-auto">GIS & Data Analyst</span>
-                        <p class="text-muted small mb-4">Mengelola pengumpulan dataset wilayah, simulasi indeks AQI, dan analisis faktor risiko kesehatan.</p>
+                        <p class="text-muted small mb-4">Manages regional dataset collection, AQI index simulation, and health risk factor analysis.</p>
                         <div class="d-flex justify-content-center gap-2 mt-auto">
                             <a href="https://github.com/si-bay" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
                                 <i class="bi bi-github"></i> GitHub
@@ -100,7 +90,6 @@
                     </div>
                 </div>
 
-                <!-- Anggota 3: Denis Muhammad Widarianto -->
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm h-100 text-center p-4 team-card">
                         <div class="avatar-container mx-auto mb-3">
@@ -108,7 +97,7 @@
                         </div>
                         <h4 class="fw-bold mb-1">Denis Muhammad Widarianto</h4>
                         <span class="badge bg-warning-subtle text-warning-emphasis mb-3 mx-auto">UI/UX & Frontend Engineer</span>
-                        <p class="text-muted small mb-4">Merancang antarmuka responsif menggunakan Bootstrap dan memastikan kenyamanan pengalaman pengguna.</p>
+                        <p class="text-muted small mb-4">Designs responsive interfaces using Bootstrap and ensures user experience comfort.</p>
                         <div class="d-flex justify-content-center gap-2 mt-auto">
                             <a href="https://github.com/DenzfiilsGo" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
                                 <i class="bi bi-github"></i> GitHub
@@ -125,9 +114,7 @@
 
     </div>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="../js/about.js"></script>
 </body>
 </html>
