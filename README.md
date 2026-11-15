@@ -14,11 +14,11 @@ Ekspor Data Spasial: Kemampuan mengunduh ringkasan dataset hasil simulasi ke dal
 
 ## Teknologi yang Digunakan
 
-Frontend: HTML5, CSS3, [Bootstrap 5](), Bootstrap Icons
+Frontend: `HTML5, CSS3, [Bootstrap 5](), Bootstrap Icons`
 
 Mapping Engine: `Leaflet.js & CartoDB Basemaps`
 
-Logika & Pemodelan: JavaScript (ES6+), scikit-learn (konsep pembobotan data tabular)
+Logika & Pemodelan: `JavaScript (ES6+), scikit-learn (konsep pembobotan data tabular)`
 
 ## Cara Menjalankan dan Mengakses Web
 
@@ -52,7 +52,7 @@ Frontend: `HTML5, CSS3, Bootstrap 5, Bootstrap Icons`
 
 Mapping Engine: `Leaflet.js & CartoDB Basemaps`
 
-Logic & Modeling: JavaScript (ES6+), scikit-learn (tabular data weighting concepts)
+Logic & Modeling: `JavaScript (ES6+), scikit-learn (tabular data weighting concepts)`
 
 
 ## How to Run and Access the Web Application
