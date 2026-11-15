@@ -1,8 +1,8 @@
-#🦠 Peta Risiko Persebaran ISPA (ARI Spread Risk Map)
+# 🦠 Peta Risiko Persebaran ISPA (ARI Spread Risk Map)
 
 Platform pemantauan spasial dan simulasi prediktif risiko Infeksi Saluran Pernapasan Akut (ISPA) berbasis lingkungan untuk mendukung mitigasi kesehatan masyarakat.
 
-##🚀 Fitur Utama
+## 🚀 Fitur Utama
 
 Beranda & Dokumentasi Sistem (index.html): Informasi latar belakang, definisi klinis ISPA, dan tujuan platform.
 
@@ -37,7 +37,7 @@ ARI-spread-risk-map\
     └── about.css
 
 
-##⚙️ Cara Menjalankan dan Mengakses Web
+## ⚙️ Cara Menjalankan dan Mengakses Web
 
 Clone atau unduh repositori ini ke komputer Anda.
 
@@ -46,13 +46,13 @@ Buka peramban (browser) dan jalankan berkas 'pages/index.html' secara langsung, 
 Anda juga dapat mengaksesnya melalui [link web.]() 
 
 
-#English
+# English
 
-#🦠 ARI (Acute Respiratory Infection) Spread Risk Map
+# 🦠 ARI (Acute Respiratory Infection) Spread Risk Map
 
 An environmental-based spatial monitoring and predictive simulation platform for Acute Respiratory Infection (ARI) risks, designed to support public health mitigation efforts.
 
-##🚀 Key Features
+## 🚀 Key Features
 
 Home & System Documentation (index.html): Background information, clinical definitions of ARI, and the platform's objectives.
 
@@ -62,7 +62,7 @@ Development Team Profile (about.html): Introductions to the collaborators, inclu
 
 Spatial Data Export: The ability to download simulation dataset summaries in .csv format.
 
-##🛠️ Technologies Used
+## 🛠️ Technologies Used
 
 Frontend: HTML5, CSS3, Bootstrap 5, Bootstrap Icons
 
@@ -70,7 +70,7 @@ Mapping Engine: Leaflet.js & CartoDB Basemaps
 
 Logic & Modeling: JavaScript (ES6+), scikit-learn (tabular data weighting concepts)
 
-##📂 Project Directory Structure
+## 📂 Project Directory Structure
 
 ARI-spread-risk-map\
 │
@@ -87,7 +87,7 @@ ARI-spread-risk-map\
     └── about.css
 
 
-##⚙️ How to Run and Access the Web Application
+## ⚙️ How to Run and Access the Web Application
 
 Clone or download this repository to your computer.
 
