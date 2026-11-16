@@ -22,11 +22,86 @@ Logika & Pemodelan: `JavaScript (ES6+), scikit-learn (konsep pembobotan data tab
 
 ## Cara Menjalankan dan Mengakses Web
 
-Clone atau unduh repositori ini ke komputer Anda.
+### Persyaratan
 
-Buka peramban (browser) dan jalankan berkas `index.html` secara langsung, atau gunakan ekstensi Live Server di VS Code.
+Sebelum menjalankan project, pastikan kamu memiliki:
 
-Anda juga dapat mengaksesnya melalui [link web.]() 
+- Python 3.13 (direkomendasikan)
+- Visual Studio Code
+- Ekstensi Live Server untuk VS Code
+- Git
+
+### Instalasi
+
+**1. Clone repository**
+
+```bash
+git clone https://github.com/si-bay/ARI-Spread-Risk-Map.git
+cd ARI-Spread-Risk-Map
+```
+
+**2. Buat virtual environment Python**
+
+```bash
+python -m venv .venv-model
+```
+
+**3. Aktifkan virtual environment**
+
+Untuk Linux (Fish shell):
+
+```fish
+source .venv-model/bin/activate.fish
+```
+
+**4. Instal dependensi**
+
+Jika repository memiliki file `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Menjalankan Aplikasi
+
+**1. Jalankan backend Flask**
+
+```bash
+python backend/app.py
+```
+
+Backend tersedia di:
+
+`http://127.0.0.1:5000`
+
+**2. Jalankan frontend**
+
+- Buka folder project di Visual Studio Code.
+- Buka file `pages/risk-map.html`.
+- Klik kanan file tersebut.
+- Pilih **Open with Live Server**.
+
+Frontend biasanya tersedia di:
+
+`http://127.0.0.1:5500/pages/risk-map.html`
+
+### API Endpoints
+
+| Endpoint | Fungsi |
+|---|---|
+| `/health` | Memeriksa status backend |
+| `/api/regions` | Mengambil data lingkungan dari wilayah yang dipantau |
+
+### Sumber Data
+
+ERI mengambil data lingkungan dari:
+
+- Open-Meteo Air Quality API
+- Open-Meteo Weather API
+- Model komposisi atmosfer CAMS Global
+
+**Disclaimer Data:** Nilai lingkungan merupakan estimasi model berdasarkan grid terdekat yang tersedia. Data bukan pengukuran langsung dari stasiun pemantauan lokal dan bukan merupakan diagnosis medis.
+
 
 #
  
@@ -57,8 +132,82 @@ Logic & Modeling: `JavaScript (ES6+), scikit-learn (tabular data weighting conce
 
 ## How to Run and Access the Web Application
 
-Clone or download this repository to your computer.
+### Requirements
 
-Open your web browser and run the `index.html` file directly, or use the "Live Server" extension in VS Code.
+Before running the project, make sure you have:
 
-You can also access it via [web link.]()
+- Python 3.13 recommended
+- Visual Studio Code
+- Live Server extension for VS Code
+- Git
+
+### Installation
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/si-bay/ARI-Spread-Risk-Map.git
+cd ARI-Spread-Risk-Map
+```
+
+**2. Create a Python virtual environment**
+
+```bash
+python -m venv .venv-model
+```
+
+**3. Activate the virtual environment**
+
+For Linux (Fish shell):
+
+```fish
+source .venv-model/bin/activate.fish
+```
+
+**4. Install dependencies**
+
+If the repository contains `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Running the Application
+
+**1. Start the Flask backend**
+
+```bash
+python backend/app.py
+```
+
+The backend will be available at:
+
+`http://127.0.0.1:5000`
+
+**2. Start the frontend**
+
+- Open the project folder in Visual Studio Code.
+- Open `pages/risk-map.html`.
+- Right-click the file.
+- Select **Open with Live Server**.
+
+The frontend will usually be available at:
+
+`http://127.0.0.1:5500/pages/risk-map.html`
+
+### API Endpoints
+
+| Endpoint | Description |
+|---|---|
+| `/health` | Check backend status |
+| `/api/regions` | Retrieve environmental data for monitored regions |
+
+### Data Sources
+
+ERI retrieves environmental data from:
+
+- Open-Meteo Air Quality API
+- Open-Meteo Weather API
+- CAMS Global atmospheric composition model
+
+**Data Disclaimer:** Environmental values are model-based estimates from the nearest available model grid cell. They should not be interpreted as direct measurements from local monitoring stations or as medical diagnoses.
