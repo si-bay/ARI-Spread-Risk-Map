@@ -1,31 +1,35 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARI Spread Risk Map - Home</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold" href="index.html">🦠 ISPA Risk Map</a>
+            <a class="navbar-brand fw-bold" href="./index.html">ARI Spread Risk Map</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
+                        <a class="nav-link active" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="generator.html">Risk Map & Analysis</a>
+                        <a class="nav-link" href="./pages/risk-map.html">Risk Map & Analysis</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About Us</a>
+                        <a class="nav-link" href="./pages/about.html">About Us</a>
                     </li>
                 </ul>
             </div>
@@ -35,13 +39,16 @@
     <header class="py-5 bg-light border-bottom mb-5">
         <div class="container text-center py-5">
             <span class="badge bg-primary-subtle text-primary mb-3 px-3 py-2 rounded-pill fw-semibold">Spatial Health Monitoring System</span>
+
             <h1 class="display-4 fw-bold text-dark mb-3">ARI Spread Risk Map</h1>
+
             <p class="lead text-muted mx-auto mb-4" style="max-width: 700px;">
                 An intelligent platform to model, map, and simulate Acute Respiratory Infection (ARI) risk levels based on regions and environmental parameters in real-time.
             </p>
+
             <div class="d-flex justify-content-center gap-3">
-                <a href="generator.html" class="btn btn-primary btn-lg px-4 fw-semibold shadow-sm">Open Map & Analysis ➔</a>
-                <a href="about.html" class="btn btn-outline-secondary btn-lg px-4 fw-semibold">Meet Our Team</a>
+                <a href="./pages/risk-map.html" class="btn btn-primary btn-lg px-4 fw-semibold shadow-sm">Open Map & Analysis ➔</a>
+                <a href="./pages/about.html" class="btn btn-outline-secondary btn-lg px-4 fw-semibold">Meet Our Team</a>
             </div>
         </div>
     </header>
@@ -52,15 +59,17 @@
                 <div class="col-lg-8">
                     <span class="badge bg-primary mb-2 px-3 py-2 rounded-pill">System Documentation</span>
                     <h2 class="fw-bold display-6 mb-3">About ARI Spread Risk Map</h2>
+
                     <p class="text-muted lead fs-6">
                         This Geographic Information System (GIS) was developed to model and map regional-based Acute Respiratory Infection (ARI) risk levels. By integrating Air Quality Index (AQI) parameters, population density, and weekly active case data, this system assists health agencies in early mitigation and targeted decision-making.
                     </p>
                 </div>
+
                 <div class="col-lg-4 text-center">
                     <div class="p-4 bg-light rounded-4 shadow-sm border">
                         <h3 class="h5 fw-bold text-dark mb-2">Platform Statistics</h3>
                         <p class="text-muted small mb-3">Real-time spatial data updates for priority monitoring regions.</p>
-                        <a href="generator.html" class="btn btn-outline-primary btn-sm w-100 fw-semibold">Open Map Dashboard ➔</a>
+                        <a href="./pages/risk-map.html" class="btn btn-outline-primary btn-sm w-100 fw-semibold">Open Map Dashboard ➔</a>
                     </div>
                 </div>
             </div>
@@ -69,16 +78,20 @@
         <section class="row align-items-center mb-5 pb-4">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <h3 class="fw-bold mb-3">What is the ARI Risk System?</h3>
+
                 <p class="text-muted">
                     Acute Respiratory Infection (ARI) is an infectious disease attacking any part of the respiratory tract from the nose to the alveoli. Our system combines geographical analysis with air quality parameters (AQI), population density, and weekly active case counts.
                 </p>
+
                 <p class="text-muted">
                     Through interactive spatial mapping, health agencies and communities can detect vulnerable regions earlier and take appropriate preventive mitigation steps.
                 </p>
             </div>
+
             <div class="col-lg-6">
                 <div class="p-4 bg-white rounded-4 shadow-sm border">
                     <h4 class="h5 fw-bold mb-3">🎯 Main Platform Objectives</h4>
+
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-2 text-secondary">
                         <li><i class="bi bi-check-circle-fill text-success me-2"></i> Map high-risk zones based on air quality & density.</li>
                         <li><i class="bi bi-check-circle-fill text-success me-2"></i> Provide independent prediction simulation tools for new regions.</li>
@@ -96,6 +109,7 @@
                     <p class="text-muted small">Explore regional points and risk spread radii directly on the geographic map.</p>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm h-100 p-4">
                     <div class="fs-1 text-warning mb-3">⚙️</div>
@@ -103,6 +117,7 @@
                     <p class="text-muted small">Enter AQI variables, active cases, and humidity to calculate regional risk scores.</p>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm h-100 p-4">
                     <div class="fs-1 text-success mb-3">📥</div>

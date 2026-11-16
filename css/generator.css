@@ -27,7 +27,7 @@ body, html {
 }
 
 .sidebar {
-    width: 360px;
+    width: 390px;
     background-color: #ffffff;
     border-right: 1px solid #e0e4e8;
     padding: 18px;
@@ -41,15 +41,22 @@ body, html {
 }
 
 .sidebar-header h1 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: #1e293b;
     margin-bottom: 2px;
 }
 
-.sidebar-header p {
-    font-size: 0.78rem;
+.sidebar-header p, .source-note {
+    font-size: 0.76rem;
     color: #64748b;
     margin-bottom: 0;
+    line-height: 1.45;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
 }
 
 .control-group {
@@ -64,38 +71,40 @@ body, html {
     color: #475569;
 }
 
-.stats-panel h3, .info-box h3, .generator-box h3 {
+.stats-panel h3, .info-box h3 {
     font-size: 0.9rem;
     color: #1e293b;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 }
 
 .stat-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
 }
 
 .stat-card {
-    padding: 8px 4px;
+    padding: 8px 3px;
     border-radius: 6px;
     text-align: center;
     color: #fff;
+    min-width: 0;
 }
 
-.stat-card.high { background-color: #ef4444; }
-.stat-card.medium { background-color: #f59e0b; }
-.stat-card.low { background-color: #10b981; }
+.stat-card.good { background-color: #16a34a; }
+.stat-card.moderate { background-color: #ca8a04; }
+.stat-card.unhealthy { background-color: #dc2626; }
+.stat-card.unavailable { background-color: #64748b; }
 
 .stat-value {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: bold;
 }
 
 .stat-label {
-    font-size: 0.68rem;
-    opacity: 0.9;
+    font-size: 0.63rem;
+    opacity: 0.95;
 }
 
 .info-box {
@@ -115,16 +124,26 @@ body, html {
 
 .detail-list {
     list-style: none;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     padding-left: 0;
     margin-bottom: 0;
 }
 
 .detail-list li {
-    padding: 5px 0;
+    padding: 6px 0;
     border-bottom: 1px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
+    gap: 10px;
+}
+
+.detail-list li span {
+    color: #475569;
+}
+
+.detail-list li strong {
+    text-align: right;
+    color: #1e293b;
 }
 
 .detail-list li:last-child {
@@ -135,6 +154,7 @@ body, html {
     flex-grow: 1;
     position: relative;
     height: 100%;
+    min-width: 0;
 }
 
 #map {
@@ -144,19 +164,20 @@ body, html {
 
 .map-legend {
     position: absolute;
-    bottom: 25px;
-    right: 25px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 12px 16px;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 12px 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    font-size: 0.82rem;
+    font-size: 0.76rem;
+    max-width: 290px;
 }
 
 .map-legend h4 {
     font-size: 0.88rem;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
     color: #1e293b;
 }
 
@@ -172,29 +193,59 @@ body, html {
     height: 10px;
     border-radius: 50%;
     display: inline-block;
+    flex-shrink: 0;
 }
 
-.dot.high { background-color: #ef4444; }
-.dot.medium { background-color: #f59e0b; }
-.dot.low { background-color: #10b981; }
+.dot.good { background-color: #16a34a; }
+.dot.moderate { background-color: #eab308; }
+.dot.sensitive { background-color: #f97316; }
+.dot.unhealthy { background-color: #dc2626; }
+.dot.very-unhealthy { background-color: #9333ea; }
+.dot.hazardous { background-color: #7f1d1d; }
+.dot.unavailable { background-color: #64748b; }
+
+@media (max-width: 900px) {
+    .sidebar {
+        width: 340px;
+    }
+}
 
 @media (max-width: 768px) {
     body, html {
+        height: auto;
+        min-height: 100%;
         overflow: auto;
     }
+
     .app-container {
         flex-direction: column;
         height: auto;
+        min-height: calc(100vh - 56px);
+        overflow: visible;
     }
+
     .sidebar {
         width: 100%;
         height: auto;
-        max-height: 50vh;
+        max-height: none;
         border-right: none;
         border-bottom: 1px solid #e0e4e8;
+        overflow: visible;
     }
+
+    .info-box {
+        flex-grow: 0;
+        max-height: 420px;
+    }
+
     .map-wrapper {
-        height: 50vh;
-        min-height: 350px;
+        height: 65vh;
+        min-height: 420px;
+    }
+
+    .map-legend {
+        right: 10px;
+        bottom: 10px;
+        max-width: 240px;
     }
 }
