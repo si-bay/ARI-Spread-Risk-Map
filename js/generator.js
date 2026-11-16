@@ -1,8 +1,13 @@
-const map = L.map('map').setView([15.0, 0.0], 2);
+const map = L.map('map', {
+    maxBounds: [[-85, -180], [85, 180]],
+    maxBoundsViscosity: 1.0
+}).setView([15.0, 0.0], 2);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
-    maxZoom: 18
+    maxZoom: 18,
+    minZoom: 2,
+    noWrap: true
 }).addTo(map);
 
 function fallbackPredictByRFWeights(aqi, cases, densityVal, humidity) {
